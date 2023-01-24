@@ -1,0 +1,26 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[sub_resource type="Shader" id=4]
+code = "shader_type spatial;
+
+uniform float min_elevation;
+uniform float max_elevation;
+uniform sampler2D elevation_color;
+
+varying float elevation;
+
+void fragment() {
+	float t = elevation /(max_elevation-min_elevation) -(min_elevation /(max_elevation-min_elevation));
+	vec3 color = texture(elevation_color, vec2(t, 0.0)).rgb;
+	ALBEDO = color;
+}
+
+void vertex() {
+	elevation = length(VERTEX);
+}
+"
+
+[resource]
+shader = SubResource( 4 )
+shader_param/min_elevation = 1.655
+shader_param/max_elevation = 1.734
