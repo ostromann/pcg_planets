@@ -1,4 +1,4 @@
-[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+[gd_resource type="ShaderMaterial" load_steps=4 format=2]
 
 [sub_resource type="Shader" id=4]
 code = "shader_type spatial;
@@ -20,7 +20,17 @@ void vertex() {
 }
 "
 
+[sub_resource type="Gradient" id=2]
+interpolation_mode = 1
+offsets = PoolRealArray( 0, 0.245614, 0.309942, 0.461988, 0.678363, 0.912281 )
+colors = PoolColorArray( 0, 0, 0, 1, 1, 0, 0, 1, 0.989583, 0.333333, 0, 1, 0.96875, 1, 0, 1, 0.921875, 0.0540161, 0.0540161, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+width = 12
+
 [resource]
 shader = SubResource( 4 )
 shader_param/min_elevation = 1.655
-shader_param/max_elevation = 1.734
+shader_param/max_elevation = 1.951
+shader_param/elevation_color = SubResource( 3 )

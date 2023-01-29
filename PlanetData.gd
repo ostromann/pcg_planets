@@ -38,20 +38,17 @@ func on_data_changed():
 
 func point_on_planet(point_on_sphere : Vector3) -> Vector3:
 	var elevation : float = 0.0
-	var base_elevation := 0.0
-	if planet_noise.size() > 0:
-		base_elevation = planet_noise[0].noise_map.get_noise_3dv(point_on_sphere * 100)
-		base_elevation = (base_elevation + 1) / 2.0 * planet_noise[0].amplitude
-		base_elevation = clamp(base_elevation, planet_noise[0].min_elevation, planet_noise[0].max_elevation)
 	for n in planet_noise:
-		var mask = 1.0
-		if n.use_first_layer_as_mask:
-			mask = base_elevation
-		var level_elevation  = n.noise_map.get_noise_3dv(point_on_sphere * 100)
-		level_elevation = (level_elevation + 1) / 2.0 * n.amplitude
-		level_elevation = clamp(level_elevation, n.min_elevation, n.max_elevation) * mask
-		elevation += level_elevation
+		if not n.enabled:
+			continue
+		if n.use_mask:
+			if n.mask_layer >= planet_noise.size():
+				pass
+			else:
+				if n.is_masked(planet_noise[n.mask_layer], point_on_sphere):
+					continue
+		elevation += n.get_value_at_point(point_on_sphere)
+		
 	return point_on_sphere * radius * (elevation + 1.0)
-
 
 
