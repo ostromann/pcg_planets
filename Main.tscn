@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://Planet.tscn" type="PackedScene" id=1]
 [ext_resource path="res://PlanetData.gd" type="Script" id=2]
@@ -6,25 +6,30 @@
 
 [sub_resource type="Gradient" id=2]
 interpolation_mode = 2
-colors = PoolColorArray( 1, 0, 0, 1, 0, 0.759766, 1, 1 )
+offsets = PoolRealArray( 0, 0.263158, 1 )
+colors = PoolColorArray( 0, 0.323242, 1, 1, 0.57022, 0.608193, 0.103207, 1, 0.245117, 1, 0, 1 )
 
 [sub_resource type="GradientTexture" id=3]
 gradient = SubResource( 2 )
 width = 12
 
 [sub_resource type="OpenSimplexNoise" id=4]
+period = 45.5
 
 [sub_resource type="Resource" id=5]
 script = ExtResource( 3 )
 enabled = true
 noise_map = SubResource( 4 )
-amplitude = 0.663
+amplitude = 0.326
 min_value = 0.0
 max_value = 0.05
 use_mask = false
 mask_layer = 0
 mask_threshold = 0.0
 flip_mask = true
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.0846154, 1 ), 0.0, 0.0, 0, 0 ]
 
 [sub_resource type="OpenSimplexNoise" id=8]
 seed = 11
@@ -37,35 +42,19 @@ script = ExtResource( 3 )
 enabled = true
 noise_map = SubResource( 8 )
 amplitude = 0.1
-min_value = -1.0
-max_value = 0.0
-use_mask = true
-mask_layer = 0
-mask_threshold = 0.025
-flip_mask = true
-
-[sub_resource type="OpenSimplexNoise" id=9]
-period = 23.2
-persistence = 1.0
-lacunarity = 1.94
-
-[sub_resource type="Resource" id=10]
-script = ExtResource( 3 )
-enabled = true
-noise_map = SubResource( 9 )
-amplitude = 0.1
-min_value = -1.0
+min_value = 0.0
 max_value = 1.0
 use_mask = true
 mask_layer = 0
-mask_threshold = 0.02
+mask_threshold = 0.025
+mask_curve = SubResource( 9 )
 flip_mask = false
 
 [sub_resource type="Resource" id=1]
 script = ExtResource( 2 )
 radius = 1.0
 resolution = 64
-planet_noise = [ SubResource( 5 ), SubResource( 7 ), SubResource( 10 ) ]
+planet_noise = [ SubResource( 5 ), SubResource( 7 ) ]
 planet_color = SubResource( 3 )
 
 [node name="Main" type="Spatial"]

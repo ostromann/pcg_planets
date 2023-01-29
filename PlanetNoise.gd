@@ -10,7 +10,15 @@ export var max_value : float = 1.0 setget set_max_value
 export var use_mask : bool = false setget set_use_mask
 export var mask_layer : int = 0 setget set_mask_layer
 export var mask_threshold : float = 0.0 setget set_mask_threshold
+export var mask_curve : Curve setget set_mask_curve
 export var flip_mask : bool = true setget set_flip_mask
+
+func set_mask_curve(val):
+	mask_curve = val
+	emit_signal("changed")
+	if mask_curve != null and not mask_curve.is_connected("changed", self, "on_data_changed"):
+		mask_curve.connect("changed", self, "on_data_changed")
+	
 
 func set_min_value(val):
 	if val > max_value:
@@ -62,6 +70,14 @@ func on_data_changed():
 	
 func get_value_at_point(point_on_sphere : Vector3) -> float:
 	var noise_val  = noise_map.get_noise_3dv(point_on_sphere * 100) * amplitude
+	return clamp(noise_val, min_value, max_value)
+	
+func get_masked_value_at_point(mask_noise_layer : PlanetNoise, point_on_sphere : Vector3) -> float:
+	var mask_val = mask_noise_layer.get_value_at_point(point_on_sphere)
+	if flip_mask:
+		mask_val = -mask_val
+	var noise_val  = noise_map.get_noise_3dv(point_on_sphere * 100) * amplitude
+	noise_val = noise_val * mask_curve.interpolate_baked(mask_val)
 	return clamp(noise_val, min_value, max_value)
 
 func is_masked(mask_noise_layer : PlanetNoise, point_on_sphere : Vector3) -> bool:

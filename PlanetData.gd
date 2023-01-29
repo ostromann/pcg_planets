@@ -45,9 +45,9 @@ func point_on_planet(point_on_sphere : Vector3) -> Vector3:
 			if n.mask_layer >= planet_noise.size():
 				pass
 			else:
-				if n.is_masked(planet_noise[n.mask_layer], point_on_sphere):
-					continue
-		elevation += n.get_value_at_point(point_on_sphere)
+				elevation += n.get_masked_value_at_point(planet_noise[n.mask_layer], point_on_sphere)
+		else:
+			elevation += n.get_value_at_point(point_on_sphere)
 		
 	return point_on_sphere * radius * (elevation + 1.0)
 
