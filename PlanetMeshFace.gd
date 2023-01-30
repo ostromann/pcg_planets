@@ -84,3 +84,4 @@ func _update_mesh(arrays : Array, planet_data):
 	material_override.set_shader_param("min_elevation", planet_data.min_elevation)
 	material_override.set_shader_param("max_elevation", planet_data.max_elevation)
 	material_override.set_shader_param("elevation_color", planet_data.planet_color)
+	#material_override.set_shader_param("elevation_metallic", planet_data.planet_color)

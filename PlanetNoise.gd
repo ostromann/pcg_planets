@@ -13,6 +13,12 @@ export var mask_threshold : float = 0.0 setget set_mask_threshold
 export var mask_curve : Curve setget set_mask_curve
 export var flip_mask : bool = true setget set_flip_mask
 
+var time : float = 0.0
+
+func _process(delta):
+	time += delta
+	print(time)
+
 func set_mask_curve(val):
 	mask_curve = val
 	emit_signal("changed")
@@ -69,26 +75,30 @@ func on_data_changed():
 	emit_signal("changed")
 	
 func get_value_at_point(point_on_sphere : Vector3) -> float:
-	var noise_val  = noise_map.get_noise_3dv(point_on_sphere * 100) * amplitude
+	var noise_val  = get_raw_value_at_point(point_on_sphere) * amplitude
 	return clamp(noise_val, min_value, max_value)
+	
+func get_raw_value_at_point(point_on_sphere : Vector3) -> float:
+	var noise_val  = noise_map.get_noise_4d(point_on_sphere.x * 100, point_on_sphere.y * 100, point_on_sphere.z * 100, time)
+	return noise_val
 	
 func get_masked_value_at_point(mask_noise_layer : PlanetNoise, point_on_sphere : Vector3) -> float:
 	var mask_val = mask_noise_layer.get_value_at_point(point_on_sphere)
 	if flip_mask:
 		mask_val = -mask_val
-	var noise_val  = noise_map.get_noise_3dv(point_on_sphere * 100) * amplitude
+	var noise_val  = get_value_at_point(point_on_sphere * 100)
 	noise_val = noise_val * mask_curve.interpolate_baked(mask_val)
 	return clamp(noise_val, min_value, max_value)
 
-func is_masked(mask_noise_layer : PlanetNoise, point_on_sphere : Vector3) -> bool:
-	"""
-	Return 'true' if this noise layer is masked by the input 'mask_noise_layer' at the given 'point_on_sphere'
-	"""
-	var is_masked = false
-	if not flip_mask:
-		if mask_noise_layer.get_value_at_point(point_on_sphere) < mask_threshold:
-			is_masked = true
-	else:
-		if mask_noise_layer.get_value_at_point(point_on_sphere) > mask_threshold:
-			is_masked = true
-	return is_masked
+#func is_masked(mask_noise_layer : PlanetNoise, point_on_sphere : Vector3) -> bool:
+#	"""
+#	Return 'true' if this noise layer is masked by the input 'mask_noise_layer' at the given 'point_on_sphere'
+#	"""
+#	var is_masked = false
+#	if not flip_mask:
+#		if mask_noise_layer.get_value_at_point(point_on_sphere) < mask_threshold:
+#			is_masked = true
+#	else:
+#		if mask_noise_layer.get_value_at_point(point_on_sphere) > mask_threshold:
+#			is_masked = true
+#	return is_masked

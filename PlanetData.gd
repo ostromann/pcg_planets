@@ -6,11 +6,15 @@ class_name PlanetData
 export var radius := 1.0 setget set_radius
 export var resolution := 5 setget set_resolution
 export(Array, Resource) var planet_noise setget set_planet_noise
+export(Array, Resource) var planet_materials setget set_planet_materials
 export var planet_color : GradientTexture setget set_planet_color
 
 var min_elevation := 9999.9
 var max_elevation := 0.0
 
+func set_planet_materials(val):
+	planet_materials = val
+	emit_signal("changed")
 
 func set_radius(val):
 	radius = val

@@ -1,0 +1,58 @@
+[gd_resource type="Resource" load_steps=10 format=2]
+
+[ext_resource path="res://PlanetNoise.gd" type="Script" id=1]
+[ext_resource path="res://PlanetData.gd" type="Script" id=2]
+
+[sub_resource type="Gradient" id=2]
+interpolation_mode = 2
+offsets = PoolRealArray( 0, 0.22807, 0.438596 )
+colors = PoolColorArray( 0.257324, 0.96875, 0, 1, 0.0371819, 0.0834961, 0.0548663, 1, 0, 0, 0, 1 )
+
+[sub_resource type="GradientTexture" id=3]
+gradient = SubResource( 2 )
+width = 12
+
+[sub_resource type="OpenSimplexNoise" id=4]
+period = 45.5
+
+[sub_resource type="Resource" id=5]
+script = ExtResource( 1 )
+enabled = true
+noise_map = SubResource( 4 )
+amplitude = 0.326
+min_value = 0.0
+max_value = 0.05
+use_mask = false
+mask_layer = 0
+mask_threshold = 0.0
+flip_mask = true
+
+[sub_resource type="Curve" id=9]
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 0.0846154, 1 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="OpenSimplexNoise" id=8]
+seed = 11
+period = 19.9
+persistence = 0.0
+lacunarity = 1.55
+
+[sub_resource type="Resource" id=7]
+script = ExtResource( 1 )
+enabled = true
+noise_map = SubResource( 8 )
+amplitude = 0.1
+min_value = 0.0
+max_value = 1.0
+use_mask = true
+mask_layer = 0
+mask_threshold = 0.025
+mask_curve = SubResource( 9 )
+flip_mask = true
+
+[resource]
+script = ExtResource( 2 )
+radius = 1.0
+resolution = 32
+planet_noise = [ SubResource( 5 ), SubResource( 7 ) ]
+planet_materials = [ null ]
+planet_color = SubResource( 3 )
